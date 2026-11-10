@@ -1,1 +1,177 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEONVERSE | TechNeon Studio</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:#080b16;
+ color:white;
+ font-family:Arial,sans-serif;
+}
+header{
+ padding:22px;
+ background:linear-gradient(120deg,#101b38,#291044);
+ border-bottom:1px solid #26365a;
+}
+.logo{
+ color:#45ddff;
+ font-size:27px;
+ font-weight:bold;
+}
+.tagline{color:#aebbd3;font-size:12px;margin-top:5px}
+main{max-width:850px;margin:auto;padding:20px}
+.hero{
+ padding:30px 20px;
+ border-radius:17px;
+ background:linear-gradient(135deg,#14294f,#35144c);
+ margin-bottom:20px;
+}
+h1{font-size:32px;margin:0 0 12px}
+p{color:#c0cce0;line-height:1.6}
+.card{
+ background:#111a2d;
+ border:1px solid #2a3b5d;
+ border-radius:14px;
+ padding:19px;
+ margin:16px 0;
+}
+h2{color:#54dcff;font-size:20px}
+button{
+ background:#176bd1;
+ color:white;
+ border:0;
+ padding:12px 17px;
+ border-radius:9px;
+ cursor:pointer;
+ margin:5px 0;
+ font-weight:bold;
+}
+button:hover{background:#278bff}
+.option{
+ display:block;
+ width:100%;
+ text-align:left;
+ background:#202e49;
+ margin:9px 0;
+}
+.stat{color:#50dcff;font-weight:bold}
+footer{text-align:center;padding:25px;color:#8493ad}
+</style>
+</head>
+
+<body>
+<header>
+ <div class="logo">✦ NEONVERSE</div>
+ <div class="tagline">AN ORIGINAL UNIVERSE BY TECHNEON STUDIO</div>
+</header>
+
+<main>
+ <section class="hero">
+  <h1>ENTER THE UNKNOWN.</h1>
+  <p>A mysterious world is waiting. Solve puzzles, explore stories and create your own journey.</p>
+  <button onclick="startStory()">START JOURNEY</button>
+ </section>
+
+ <section class="card">
+  <h2>PLAYER PROFILE</h2>
+  <p>Level: <span class="stat" id="level">1</span></p>
+  <p>Experience: <span class="stat" id="xp">0</span> XP</p>
+  <p>Missions: <span class="stat" id="missions">0</span></p>
+ </section>
+
+ <section class="card">
+  <h2>DAILY MYSTERY</h2>
+  <p>Which part of a computer stores information permanently?</p>
+  <button class="option" onclick="answer(0)">A. RAM</button>
+  <button class="option" onclick="answer(1)">B. SSD</button>
+  <button class="option" onclick="answer(2)">C. Monitor</button>
+  <p id="result"></p>
+ </section>
+
+ <section class="card">
+  <h2>STORY MODE</h2>
+  <p id="storyText">A mysterious signal appears on your screen. What will you do?</p>
+  <div id="choices">
+   <button onclick="startStory()">Begin Story</button>
+  </div>
+ </section>
+
+ <section class="card">
+  <h2>COMING NEXT</h2>
+  <p>More original stories, mystery missions, characters and challenges are on their way.</p>
+ </section>
+</main>
+
+<footer>
+TechNeon Studio © 2026 | NEONVERSE
+</footer>
+
+<script>
+let xp=Number(localStorage.getItem("nvxp"))||0;
+let missions=Number(localStorage.getItem("nvmissions"))||0;
+let answered=localStorage.getItem("nvanswered")==="yes";
+
+function update(){
+ document.getElementById("xp").textContent=xp;
+ document.getElementById("missions").textContent=missions;
+ document.getElementById("level").textContent=Math.floor(xp/100)+1;
+ localStorage.setItem("nvxp",xp);
+ localStorage.setItem("nvmissions",missions);
+}
+
+function answer(n){
+ let r=document.getElementById("result");
+ if(answered){
+  r.textContent="You have already completed today's mystery!";
+  return;
+ }
+ if(n===1){
+  xp+=20;
+  missions++;
+  r.textContent="Correct! You earned 20 XP!";
+ }else{
+  r.textContent="Not quite! The correct answer is SSD.";
+ }
+ answered=true;
+ localStorage.setItem("nvanswered","yes");
+ update();
+}
+
+function startStory(){
+ document.getElementById("storyText").textContent=
+ "CHAPTER 1: THE UNKNOWN SIGNAL. Your device receives a mysterious message. Choose your next move.";
+ document.getElementById("choices").innerHTML=
+ '<button onclick="choice(1)">Investigate the signal</button>'+
+ '<button onclick="choice(2)">Ignore the message</button>';
+}
+
+function choice(n){
+ document.getElementById("storyText").textContent=
+ n===1
+ ?"You discover a hidden symbol inside the signal. Your adventure begins!"
+ :"You ignore the signal, but another mysterious message appears!";
+ document.getElementById("choices").innerHTML=
+ '<button onclick="finishStory()">Complete Mission</button>';
+}
+
+function finishStory(){
+ xp+=10;
+ missions++;
+ update();
+ document.getElementById("storyText").textContent=
+ "Mission complete! You earned 10 XP.";
+ document.getElementById("choices").innerHTML=
+ '<button onclick="startStory()">Play Again</button>';
+}
+
+update();
+</script>
+</body>
+</html>
+
