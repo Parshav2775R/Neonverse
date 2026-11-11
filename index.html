@@ -8,170 +8,524 @@
 
 <style>
 *{box-sizing:border-box}
+
+:root{
+ --cyan:#00eaff;
+ --pink:#ff36bd;
+ --bg:#070a16;
+}
+
 body{
  margin:0;
- background:#080b16;
+ min-height:100vh;
+ background:var(--bg);
  color:white;
  font-family:Arial,sans-serif;
+ overflow-x:hidden;
 }
-header{
- padding:22px;
- background:linear-gradient(120deg,#101b38,#291044);
- border-bottom:1px solid #26365a;
-}
-.logo{
- color:#45ddff;
- font-size:27px;
- font-weight:bold;
-}
-.tagline{color:#aebbd3;font-size:12px;margin-top:5px}
-main{max-width:850px;margin:auto;padding:20px}
-.hero{
- padding:30px 20px;
- border-radius:17px;
- background:linear-gradient(135deg,#14294f,#35144c);
- margin-bottom:20px;
-}
-h1{font-size:32px;margin:0 0 12px}
-p{color:#c0cce0;line-height:1.6}
-.card{
- background:#111a2d;
- border:1px solid #2a3b5d;
- border-radius:14px;
- padding:19px;
- margin:16px 0;
-}
-h2{color:#54dcff;font-size:20px}
+
+button,input,select{font:inherit}
+
 button{
- background:#176bd1;
- color:white;
- border:0;
- padding:12px 17px;
- border-radius:9px;
  cursor:pointer;
- margin:5px 0;
+ border:1px solid #00eaff88;
+ background:#101b30;
+ color:white;
+ padding:14px 22px;
+ border-radius:12px;
+ transition:.2s;
+}
+
+button:hover{
+ background:#12364b;
+ border-color:var(--cyan);
+ transform:translateY(-2px);
+}
+
+.primary{
+ background:linear-gradient(100deg,#007fbb,#9b24a9);
+ border:0;
  font-weight:bold;
 }
-button:hover{background:#278bff}
-.option{
- display:block;
- width:100%;
- text-align:left;
- background:#202e49;
- margin:9px 0;
+
+.screen{
+ display:none;
+ min-height:100vh;
+ padding:24px;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ position:relative;
 }
-.stat{color:#50dcff;font-weight:bold}
-footer{text-align:center;padding:25px;color:#8493ad}
+
+.screen.active{display:flex}
+
+.panel{
+ width:min(100%,560px);
+ padding:30px 22px;
+ border:1px solid #00eaff55;
+ border-radius:22px;
+ background:#0b1223eF;
+ box-shadow:0 0 35px #00cfff18;
+}
+
+.logo{
+ width:76px;
+ height:76px;
+ display:grid;
+ place-items:center;
+ margin:0 auto 18px;
+ border:2px solid var(--cyan);
+ border-radius:22px;
+ color:var(--cyan);
+ font-size:29px;
+ font-weight:bold;
+ text-shadow:0 0 15px var(--cyan);
+ box-shadow:0 0 24px #00eaff55;
+}
+
+.studio{
+ color:#a7b9d8;
+ letter-spacing:4px;
+ font-size:12px;
+}
+
+h1{
+ font-size:clamp(34px,9vw,65px);
+ margin:12px 0;
+ letter-spacing:3px;
+ text-shadow:0 0 22px #00d9ff77;
+}
+
+h2{color:var(--cyan)}
+
+.subtitle{
+ color:#aab8d0;
+ line-height:1.6;
+}
+
+.menu{
+ display:grid;
+ gap:12px;
+ margin-top:28px;
+}
+
+.menu button{width:100%}
+
+.bg-glow{
+ position:fixed;
+ width:260px;
+ height:260px;
+ border-radius:50%;
+ filter:blur(100px);
+ opacity:.18;
+ pointer-events:none;
+ background:#00aaff;
+ top:15%;
+ left:-100px;
+}
+
+.bg-glow.two{
+ background:#d000ff;
+ top:auto;
+ left:auto;
+ right:-100px;
+ bottom:10%;
+}
+
+.small{
+ color:#8293b1;
+ font-size:12px;
+ margin-top:25px;
+}
+
+.field{
+ width:100%;
+ padding:14px;
+ margin:12px 0;
+ background:#080e1d;
+ color:white;
+ border:1px solid #00eaff66;
+ border-radius:10px;
+}
+
+.options{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
+ margin:20px 0;
+}
+
+.options button.selected{
+ border:2px solid var(--pink);
+ background:#32143b;
+}
+
+.topbar{
+ position:absolute;
+ top:15px;
+ left:15px;
+ right:15px;
+ display:flex;
+ justify-content:space-between;
+ gap:10px;
+ color:var(--cyan);
+ font-size:13px;
+}
+
+.stats{
+ display:flex;
+ justify-content:space-around;
+ gap:10px;
+ margin:22px 0;
+ flex-wrap:wrap;
+}
+
+.stat{
+ background:#111c31;
+ padding:14px;
+ border-radius:12px;
+ flex:1;
+ min-width:90px;
+}
+
+.story{
+ background:#101b30;
+ padding:20px;
+ border-radius:14px;
+ line-height:1.7;
+ margin:20px 0;
+ text-align:left;
+}
+
+.choices{
+ display:grid;
+ gap:12px;
+}
+
+.choices button{width:100%}
+
+.back{
+ position:absolute;
+ top:16px;
+ left:16px;
+}
+
+@media(max-width:420px){
+ .panel{padding:25px 16px}
+ .screen{padding:18px}
+ .options{grid-template-columns:1fr}
+}
 </style>
 </head>
 
 <body>
-<header>
- <div class="logo">✦ NEONVERSE</div>
- <div class="tagline">AN ORIGINAL UNIVERSE BY TECHNEON STUDIO</div>
-</header>
 
-<main>
- <section class="hero">
-  <h1>ENTER THE UNKNOWN.</h1>
-  <p>A mysterious world is waiting. Solve puzzles, explore stories and create your own journey.</p>
-  <button onclick="startStory()">START JOURNEY</button>
- </section>
+<div class="bg-glow"></div>
+<div class="bg-glow two"></div>
 
- <section class="card">
-  <h2>PLAYER PROFILE</h2>
-  <p>Level: <span class="stat" id="level">1</span></p>
-  <p>Experience: <span class="stat" id="xp">0</span> XP</p>
-  <p>Missions: <span class="stat" id="missions">0</span></p>
- </section>
+<!-- TECHNEON INTRO -->
+<section id="studio" class="screen active">
+ <div class="panel">
+  <div class="logo">TN</div>
+  <div class="studio">TECHNEON STUDIO PRESENTS</div>
+  <h2>WELCOME TO</h2>
+  <p class="subtitle">A new world is waiting for you.</p>
+  <button class="primary" onclick="showScreen('opening')">
+   ENTER
+  </button>
+ </div>
+</section>
 
- <section class="card">
-  <h2>DAILY MYSTERY</h2>
-  <p>Which part of a computer stores information permanently?</p>
-  <button class="option" onclick="answer(0)">A. RAM</button>
-  <button class="option" onclick="answer(1)">B. SSD</button>
-  <button class="option" onclick="answer(2)">C. Monitor</button>
-  <p id="result"></p>
- </section>
+<!-- GAME OPENING -->
+<section id="opening" class="screen">
+ <div class="panel">
+  <div class="studio">A MULTIVERSE EXPERIENCE</div>
+  <h1>NEONVERSE</h1>
+  <h2>YOUR WORLD. YOUR STORY.</h2>
+  <p class="subtitle">
+   Countless worlds. Endless possibilities.
+   Every choice creates a different journey.
+  </p>
+  <button class="primary" onclick="showScreen('menu')">
+   CONTINUE
+  </button>
+ </div>
+</section>
 
- <section class="card">
-  <h2>STORY MODE</h2>
-  <p id="storyText">A mysterious signal appears on your screen. What will you do?</p>
-  <div id="choices">
-   <button onclick="startStory()">Begin Story</button>
+<!-- MAIN MENU -->
+<section id="menu" class="screen">
+ <div class="panel">
+  <div class="logo">NV</div>
+  <div class="studio">TECHNEON STUDIO</div>
+  <h1>NEONVERSE</h1>
+  <p class="subtitle">Enter the Multiverse</p>
+
+  <div class="menu">
+   <button class="primary" onclick="newGame()">START GAME</button>
+   <button id="continueBtn" onclick="continueGame()">CONTINUE</button>
+   <button onclick="showScreen('settings')">SETTINGS</button>
+   <button onclick="showScreen('about')">ABOUT</button>
   </div>
- </section>
 
- <section class="card">
-  <h2>COMING NEXT</h2>
-  <p>More original stories, mystery missions, characters and challenges are on their way.</p>
- </section>
-</main>
+  <div class="small">VERSION 0.1 • FIRST PROTOTYPE</div>
+ </div>
+</section>
 
-<footer>
-TechNeon Studio © 2026 | NEONVERSE
-</footer>
+<!-- CHARACTER CREATION -->
+<section id="character" class="screen">
+ <div class="panel">
+  <h2>CREATE YOUR CHARACTER</h2>
+  <p class="subtitle">Your journey begins with your identity.</p>
+
+  <input id="playerName" class="field"
+   maxlength="18" placeholder="Enter your character name">
+
+  <p>Choose your starting path</p>
+
+  <div class="options">
+   <button class="selected" id="path1"
+    onclick="selectPath('Explorer',this)">
+    EXPLORER
+   </button>
+   <button id="path2"
+    onclick="selectPath('Warrior',this)">
+    WARRIOR
+   </button>
+   <button id="path3"
+    onclick="selectPath('Crafter',this)">
+    CRAFTER
+   </button>
+   <button id="path4"
+    onclick="selectPath('Survivor',this)">
+    SURVIVOR
+   </button>
+  </div>
+
+  <button class="primary" onclick="createCharacter()">
+   BEGIN JOURNEY
+  </button>
+  <button onclick="showScreen('menu')">BACK</button>
+ </div>
+</section>
+
+<!-- GAME SCREEN -->
+<section id="game" class="screen">
+ <div class="topbar">
+  <span>NEONVERSE</span>
+  <button onclick="showScreen('menu')">MENU</button>
+ </div>
+
+ <div class="panel">
+  <h2 id="welcome">WELCOME</h2>
+  <p class="subtitle" id="playerInfo">Your journey starts now.</p>
+
+  <div class="stats">
+   <div class="stat">
+    <div>LEVEL</div>
+    <h2 id="level">1</h2>
+   </div>
+   <div class="stat">
+    <div>XP</div>
+    <h2 id="xp">0</h2>
+   </div>
+   <div class="stat">
+    <div>MISSIONS</div>
+    <h2 id="missions">0</h2>
+   </div>
+  </div>
+
+  <div class="story">
+   <h3>CHAPTER 1: THE UNKNOWN SIGNAL</h3>
+   <p id="storyText">
+    Your device receives a mysterious message.
+    What will you do?
+   </p>
+  </div>
+
+  <div class="choices" id="choices">
+   <button onclick="choice(1)">Investigate the signal</button>
+   <button onclick="choice(2)">Ignore the message</button>
+  </div>
+ </div>
+</section>
+
+<!-- SETTINGS -->
+<section id="settings" class="screen">
+ <div class="panel">
+  <h2>SETTINGS</h2>
+  <p class="subtitle">Customize your experience.</p>
+
+  <label for="quality">Graphics Quality</label>
+  <select id="quality" class="field">
+   <option>Low</option>
+   <option selected>Medium</option>
+   <option>High</option>
+  </select>
+
+  <button class="primary" onclick="saveSettings()">SAVE SETTINGS</button>
+  <button onclick="showScreen('menu')">BACK</button>
+ </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="screen">
+ <div class="panel">
+  <div class="logo">TN</div>
+  <h2>ABOUT NEONVERSE</h2>
+  <p class="subtitle">
+   NEONVERSE is a growing multiverse game project
+   by TechNeon Studio.
+  </p>
+  <p class="subtitle">
+   Explore worlds, discover abilities, craft,
+   survive and create your own story.
+  </p>
+  <p class="small">Made by TechNeon Studio</p>
+  <button onclick="showScreen('menu')">BACK</button>
+ </div>
+</section>
 
 <script>
-let xp=Number(localStorage.getItem("nvxp"))||0;
-let missions=Number(localStorage.getItem("nvmissions"))||0;
-let answered=localStorage.getItem("nvanswered")==="yes";
+let xp = 0;
+let missions = 0;
+let player = "";
+let path = "Explorer";
+let currentChoice = 0;
 
-function update(){
- document.getElementById("xp").textContent=xp;
- document.getElementById("missions").textContent=missions;
- document.getElementById("level").textContent=Math.floor(xp/100)+1;
- localStorage.setItem("nvxp",xp);
- localStorage.setItem("nvmissions",missions);
+function showScreen(id){
+ document.querySelectorAll(".screen").forEach(screen=>{
+  screen.classList.remove("active");
+ });
+ document.getElementById(id).classList.add("active");
 }
 
-function answer(n){
- let r=document.getElementById("result");
- if(answered){
-  r.textContent="You have already completed today's mystery!";
+function selectPath(value,button){
+ path = value;
+ document.querySelectorAll(".options button").forEach(btn=>{
+  btn.classList.remove("selected");
+ });
+ button.classList.add("selected");
+}
+
+function newGame(){
+ showScreen("character");
+}
+
+function createCharacter(){
+ let name = document.getElementById("playerName").value.trim();
+
+ if(!name){
+  alert("Please enter your character name!");
   return;
  }
- if(n===1){
-  xp+=20;
-  missions++;
-  r.textContent="Correct! You earned 20 XP!";
- }else{
-  r.textContent="Not quite! The correct answer is SSD.";
- }
- answered=true;
- localStorage.setItem("nvanswered","yes");
+
+ player = name;
+ xp = 0;
+ missions = 0;
+ currentChoice = 0;
+
+ saveGame();
  update();
+ startStory();
+ showScreen("game");
+}
+
+function continueGame(){
+ let saved = localStorage.getItem("neonverseSave");
+
+ if(!saved){
+  alert("No saved journey found. Start a new game!");
+  return;
+ }
+
+ let data = JSON.parse(saved);
+ player = data.player;
+ path = data.path;
+ xp = data.xp;
+ missions = data.missions;
+
+ update();
+ startStory();
+ showScreen("game");
+}
+
+function saveGame(){
+ localStorage.setItem("neonverseSave",JSON.stringify({
+  player:player,
+  path:path,
+  xp:xp,
+  missions:missions
+ }));
+}
+
+function update(){
+ document.getElementById("welcome").textContent=
+  "WELCOME, "+player.toUpperCase();
+
+ document.getElementById("playerInfo").textContent=
+  "Starting Path: "+path;
+
+ document.getElementById("xp").textContent=xp;
+ document.getElementById("missions").textContent=missions;
+ document.getElementById("level").textContent=
+  Math.floor(xp/100)+1;
+
+ document.getElementById("continueBtn").style.display=
+  localStorage.getItem("neonverseSave") ? "block":"none";
 }
 
 function startStory(){
+ currentChoice=0;
  document.getElementById("storyText").textContent=
- "CHAPTER 1: THE UNKNOWN SIGNAL. Your device receives a mysterious message. Choose your next move.";
+  "Your device receives a mysterious message. Choose your next move.";
+
  document.getElementById("choices").innerHTML=
- '<button onclick="choice(1)">Investigate the signal</button>'+
- '<button onclick="choice(2)">Ignore the message</button>';
+  '<button onclick="choice(1)">Investigate the signal</button>'+
+  '<button onclick="choice(2)">Ignore the message</button>';
 }
 
 function choice(n){
+ currentChoice=n;
+
  document.getElementById("storyText").textContent=
- n===1
- ?"You discover a hidden symbol inside the signal. Your adventure begins!"
- :"You ignore the signal, but another mysterious message appears!";
+  n===1
+  ? "You discover a hidden symbol inside the signal. Your adventure begins!"
+  : "You ignore the message, but another mysterious message appears!";
+
  document.getElementById("choices").innerHTML=
- '<button onclick="finishStory()">Complete Mission</button>';
+  '<button onclick="finishStory()">COMPLETE MISSION</button>';
 }
 
 function finishStory(){
+ if(currentChoice===0)return;
+
  xp+=10;
  missions++;
+ saveGame();
  update();
+
  document.getElementById("storyText").textContent=
- "Mission complete! You earned 10 XP.";
+  "Mission complete! You earned 10 XP.";
+
  document.getElementById("choices").innerHTML=
- '<button onclick="startStory()">Play Again</button>';
+  '<button onclick="startStory()">PLAY AGAIN</button>';
+}
+
+function saveSettings(){
+ let quality=document.getElementById("quality").value;
+ localStorage.setItem("neonverseQuality",quality);
+ alert("Settings saved!");
+ showScreen("menu");
+}
+
+let savedQuality=localStorage.getItem("neonverseQuality");
+if(savedQuality){
+ document.getElementById("quality").value=savedQuality;
 }
 
 update();
 </script>
+
 </body>
 </html>
-
